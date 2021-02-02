@@ -1,11 +1,18 @@
-class mainScene {
+export default class mainScene extends Phaser.Scene {
+  constructor() {
+    super({ key: "mainScene" });
+  }
   preload() {
     this.load.image("player", "assets/player.png");
     this.load.image("coin", "assets/coin.png");
     this.load.image("baddie", "assets/baddie.png");
+    this.load.audio("bgm", "assets/oedipus_ark_pandora.mp3");
+    this.load.audio("ping", "assets/p-ping.mp3");
+    this.load.audio("death", "assets/player_death.wav");
   }
 
   create() {
+    this.sound.play("bgm");
     this.player = this.physics.add.sprite(100, 100, "player");
     this.coin = this.physics.add.sprite(300, 200, "coin");
     this.baddies = this.physics.add.group();
@@ -58,6 +65,7 @@ class mainScene {
   }
 
   hit() {
+    this.sound.play("ping");
     this.coin.x = Phaser.Math.Between(100, 600);
     this.coin.y = Phaser.Math.Between(100, 200);
 
@@ -80,7 +88,8 @@ class mainScene {
   }
 
   caught(player) {
-    console.log("caught");
+    this.sound.play("death");
+    this.sound.stopByKey("bgm");
     this.physics.pause();
 
     player.setTint(0xff0000);
@@ -113,12 +122,3 @@ class mainScene {
     // this.scene.pause();
   }
 }
-
-new Phaser.Game({
-  width: 700,
-  height: 300,
-  backgroundColor: "#3498db",
-  scene: mainScene,
-  physics: { default: "arcade" },
-  parent: "game",
-});
