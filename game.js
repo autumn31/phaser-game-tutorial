@@ -86,7 +86,7 @@ class mainScene {
     player.setTint(0xff0000);
     this.gameOver = true;
 
-    var ggText = this.add.text(300, 150, "game over", {
+    var ggText = this.add.text(300, 150, "game over\nrestart", {
       font: "20px Arial",
       fill: "#fff",
       align: "center",
@@ -105,13 +105,13 @@ class mainScene {
         this.physics.resume();
         this.scene.restart(); // restart current scene
         this.player.disableBody(true, true);
-        this.baddie.disableBody(true, true);
+        this.baddies.children.iterate((baddie) => {
+          baddie.disableBody(true, true);
+        });
       }.bind(this)
     );
     // this.scene.pause();
   }
-
-  genBaddie() {}
 }
 
 new Phaser.Game({
