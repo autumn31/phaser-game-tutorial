@@ -12,6 +12,14 @@ export default class mainScene extends Phaser.Scene {
   }
 
   create() {
+    this.input.keyboard.on(
+      "keydown-" + "SPACE",
+      function (event) {
+        if (this.gameOver) {
+          this.restart();
+        }
+      }.bind(this)
+    );
     // deal with inits
     if (!this.bgm) {
       this.bgm = this.sound.add("bgm", { loop: true });
@@ -165,11 +173,16 @@ export default class mainScene extends Phaser.Scene {
     player.setTint(0xff0000);
     this.gameOver = true;
 
-    var ggText = this.add.text(300, 150, "game over\nrestart", {
-      font: "20px Arial",
-      fill: "#fff",
-      align: "center",
-    });
+    var ggText = this.add.text(
+      250,
+      120,
+      "game over\n(Click or Space to restart)",
+      {
+        font: "20px Arial",
+        fill: "#fff",
+        align: "center",
+      }
+    );
     ggText.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, ggText.width, ggText.height),
       Phaser.Geom.Rectangle.Contains
@@ -178,17 +191,21 @@ export default class mainScene extends Phaser.Scene {
     ggText.on(
       "pointerdown",
       function () {
-        this.registry.destroy(); // destroy registry
-        this.events.off(); // disable all active events
-        this.gameOver = false;
-        this.physics.resume();
-        this.scene.restart(); // restart current scene
-        this.player.disableBody(true, true);
-        this.baddies.children.iterate((baddie) => {
-          baddie.disableBody(true, true);
-        });
+        this.restart();
       }.bind(this)
     );
     // this.scene.pause();
+  }
+
+  restart() {
+    this.registry.destroy(); // destroy registry
+    this.events.off(); // disable all active events
+    this.gameOver = false;
+    this.physics.resume();
+    this.scene.restart(); // restart current scene
+    this.player.disableBody(true, true);
+    this.baddies.children.iterate((baddie) => {
+      baddie.disableBody(true, true);
+    });
   }
 }
