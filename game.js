@@ -12,16 +12,49 @@ export default class mainScene extends Phaser.Scene {
   }
 
   create() {
+    // deal with inits
     if (!this.bgm) {
       this.bgm = this.sound.add("bgm", { loop: true });
+      this.bgmOn = true;
+      this.soundOn = true;
     }
-    this.bgm.play();
 
-    this.soundOn = true;
-    this.soundText = this.add.text(600, 20, "Bgm: on", {
+    if (this.bgmOn) {
+      this.bgm.play();
+    }
+
+    this.bgmText = this.add.text(600, 20, `Bgm: ${this.bgmOn ? "on" : "off"}`, {
       font: "16px Arial",
       fill: "#fff",
     });
+    this.bgmText.setInteractive(
+      new Phaser.Geom.Rectangle(0, 0, this.bgmText.width, this.bgmText.height),
+      Phaser.Geom.Rectangle.Contains
+    );
+
+    this.bgmText.on(
+      "pointerdown",
+      function () {
+        if (this.bgmOn) {
+          this.bgmOn = false;
+          this.bgm.stop();
+        } else {
+          this.bgmOn = true;
+          this.bgm.play();
+        }
+        this.bgmText.setText(`Bgm: ${this.bgmOn ? "on" : "off"}`);
+      }.bind(this)
+    );
+
+    this.soundText = this.add.text(
+      600,
+      45,
+      `Sound: ${this.bgmOn ? "on" : "off"}`,
+      {
+        font: "16px Arial",
+        fill: "#fff",
+      }
+    );
     this.soundText.setInteractive(
       new Phaser.Geom.Rectangle(
         0,
@@ -37,12 +70,10 @@ export default class mainScene extends Phaser.Scene {
       function () {
         if (this.soundOn) {
           this.soundOn = false;
-          this.bgm.stop();
         } else {
           this.soundOn = true;
-          this.bgm.play();
         }
-        this.soundText.setText(`Bgm: ${this.soundOn ? "on" : "off"}`);
+        this.soundText.setText(`Sound: ${this.soundOn ? "on" : "off"}`);
       }.bind(this)
     );
 
@@ -100,7 +131,9 @@ export default class mainScene extends Phaser.Scene {
   }
 
   hit() {
-    this.sound.play("ping");
+    if (this.soundOn) {
+      this.sound.play("ping");
+    }
     this.coin.x = Phaser.Math.Between(100, 600);
     this.coin.y = Phaser.Math.Between(100, 200);
 
@@ -123,7 +156,9 @@ export default class mainScene extends Phaser.Scene {
   }
 
   caught(player) {
-    this.sound.play("death");
+    if (this.soundOn) {
+      this.sound.play("death");
+    }
     this.bgm.stop();
     this.physics.pause();
 
