@@ -57,7 +57,7 @@ export default class mainScene extends Phaser.Scene {
     this.soundText = this.add.text(
       600,
       45,
-      `Sound: ${this.bgmOn ? "on" : "off"}`,
+      `Sound: ${this.soundOn ? "on" : "off"}`,
       {
         font: "16px Arial",
         fill: "#fff",
