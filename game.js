@@ -17,9 +17,29 @@ export default class mainScene extends Phaser.Scene {
       function (event) {
         if (this.gameOver) {
           this.restart();
+        } else {
+          if (this.speedUpReady) {
+            this.speedUpReady = false;
+            this.speedUpText.visible = false;
+            this.speedUp = true;
+            setTimeout(
+              function () {
+                this.speedUpReady = true;
+                this.speedUpText.visible = true;
+              }.bind(this),
+              10000
+            );
+            setTimeout(
+              function () {
+                this.speedUp = false;
+              }.bind(this),
+              3000
+            );
+          }
         }
       }.bind(this)
     );
+
     // deal with inits
     if (!this.bgm) {
       this.bgm = this.sound.add("bgm", { loop: true });
@@ -85,6 +105,13 @@ export default class mainScene extends Phaser.Scene {
       }.bind(this)
     );
 
+    this.speedUp = false;
+    this.speedUpReady = true;
+    this.speedUpText = this.add.text(20, 50, "SpeedUp", {
+      font: "16px Arial",
+      fill: "#fde924",
+    });
+
     this.player = this.physics.add.sprite(100, 100, "player");
     this.coin = this.physics.add.sprite(300, 200, "coin");
     this.baddies = this.physics.add.group();
@@ -115,16 +142,20 @@ export default class mainScene extends Phaser.Scene {
       return;
     }
 
+    var v = 1;
+    if (this.speedUp) {
+      v = 1.5;
+    }
     if (this.arrow.right.isDown) {
-      this.player.x += 3;
+      this.player.x += 3 * v;
     } else if (this.arrow.left.isDown) {
-      this.player.x -= 3;
+      this.player.x -= 3 * v;
     }
 
     if (this.arrow.down.isDown) {
-      this.player.y += 3;
+      this.player.y += 3 * v;
     } else if (this.arrow.up.isDown) {
-      this.player.y -= 3;
+      this.player.y -= 3 * v;
     }
 
     this.baddies.children.iterate((baddie) => {
