@@ -12,7 +12,10 @@ export default class mainScene extends Phaser.Scene {
   }
 
   create() {
-    this.sound.play("bgm");
+    if (!this.bgm) {
+      this.bgm = this.sound.add("bgm", { loop: true });
+    }
+    this.bgm.play();
     this.player = this.physics.add.sprite(100, 100, "player");
     this.coin = this.physics.add.sprite(300, 200, "coin");
     this.baddies = this.physics.add.group();
@@ -89,7 +92,7 @@ export default class mainScene extends Phaser.Scene {
 
   caught(player) {
     this.sound.play("death");
-    this.sound.stopByKey("bgm");
+    this.bgm.stop();
     this.physics.pause();
 
     player.setTint(0xff0000);
