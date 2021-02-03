@@ -16,13 +16,45 @@ export default class mainScene extends Phaser.Scene {
       this.bgm = this.sound.add("bgm", { loop: true });
     }
     this.bgm.play();
+
+    this.soundOn = true;
+    this.soundText = this.add.text(600, 20, "Bgm: on", {
+      font: "16px Arial",
+      fill: "#fff",
+    });
+    this.soundText.setInteractive(
+      new Phaser.Geom.Rectangle(
+        0,
+        0,
+        this.soundText.width,
+        this.soundText.height
+      ),
+      Phaser.Geom.Rectangle.Contains
+    );
+
+    this.soundText.on(
+      "pointerdown",
+      function () {
+        if (this.soundOn) {
+          this.soundOn = false;
+          this.bgm.stop();
+        } else {
+          this.soundOn = true;
+          this.bgm.play();
+        }
+        this.soundText.setText(`Bgm: ${this.soundOn ? "on" : "off"}`);
+      }.bind(this)
+    );
+
     this.player = this.physics.add.sprite(100, 100, "player");
     this.coin = this.physics.add.sprite(300, 200, "coin");
     this.baddies = this.physics.add.group();
 
     this.score = 0;
-    let style = { font: "20px Arial", fill: "#fff" };
-    this.scoreText = this.add.text(20, 20, "score: " + this.score, style);
+    this.scoreText = this.add.text(20, 20, "score: " + this.score, {
+      font: "20px Arial",
+      fill: "#fff",
+    });
 
     this.arrow = this.input.keyboard.createCursorKeys();
 
