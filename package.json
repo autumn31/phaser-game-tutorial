@@ -1,0 +1,28 @@
+{
+  "name": "phaser-game-tutorial",
+  "version": "1.0.0",
+  "description": "This is a very simple HTML5 game made with the framework Phaser 3.14.",
+  "main": "menu.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack serve --mode development --env development --port 3100"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autumn31/phaser-game-tutorial.git"
+  },
+  "author": "autumn31",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/autumn31/phaser-game-tutorial/issues"
+  },
+  "homepage": "https://github.com/autumn31/phaser-game-tutorial#readme",
+  "dependencies": {
+    "webpack-dev-server": "^3.11.2"
+  },
+  "devDependencies": {
+    "webpack": "^5.20.1",
+    "webpack-cli": "^4.5.0"
+  }
+}
