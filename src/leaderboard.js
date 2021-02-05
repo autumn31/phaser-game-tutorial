@@ -46,6 +46,8 @@ export function uploadscore(score) {
           if (rn !== "") {
             database.ref("leaderboard/" + rn).remove();
           }
+        } else if (snapshot.val() >= score) {
+          return;
         }
         database.ref("leaderboard/" + name).set(score);
       });
