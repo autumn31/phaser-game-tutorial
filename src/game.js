@@ -1,3 +1,4 @@
+import { uploadscore } from "./leaderboard.js";
 export default class mainScene extends Phaser.Scene {
   constructor() {
     super({ key: "mainScene" });
@@ -203,6 +204,8 @@ export default class mainScene extends Phaser.Scene {
 
     player.setTint(0xff0000);
     this.gameOver = true;
+
+    uploadscore(this.score);
 
     var ggText = this.add.text(
       250,
