@@ -1,4 +1,5 @@
 import mainScene from "./game.js";
+import "./leaderboard.js";
 
 class menuScene extends Phaser.Scene {
   constructor() {
