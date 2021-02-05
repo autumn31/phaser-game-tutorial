@@ -28,26 +28,26 @@ function createListItem(name, score) {
 export function uploadscore(score) {
   var name = document.getElementById("fname").value;
 
-  database
-    .ref("leaderboard/" + name)
-    .once("value")
-    .then((snapshot) => {
-      if (snapshot.val() && score <= snapshot.val()) {
-        return;
-      }
-      if (name !== "") {
-        var rn = "";
-        if (leaderbard.length >= 5) {
-          var last = leaderbard[4];
-          if (score <= last[1]) {
-            return;
+  if (name !== "") {
+    database
+      .ref("leaderboard/" + name)
+      .once("value")
+      .then((snapshot) => {
+        // if player not on board, check if need to remove player
+        if (!snapshot.val()) {
+          var rn = "";
+          if (leaderbard.length >= 5) {
+            var last = leaderbard[4];
+            if (score <= last[1]) {
+              return;
+            }
+            rn = last[0];
           }
-          rn = last[0];
-        }
-        if (rn !== "") {
-          database.ref("leaderboard/" + name).remove();
+          if (rn !== "") {
+            database.ref("leaderboard/" + rn).remove();
+          }
         }
         database.ref("leaderboard/" + name).set(score);
-      }
-    });
+      });
+  }
 }
